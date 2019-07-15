@@ -4,43 +4,9 @@ COL_END="\033[0m"
 
 REPO=docker-to-linux
 
-.PHONY:
-debian: debian.img
-
-.PHONY:
-ubuntu: ubuntu.img
-
-.PHONY:
-alpine: alpine.img
-
-.PHONY:
-debian.tar:
-	@make DISTR="debian" linux.tar
-
-.PHONY:
-debian.img:
-	@make DISTR="debian" linux.img
-
-.PHONY:
-ubuntu.tar:
-	@make DISTR="ubuntu" linux.tar
-
-.PHONY:
-ubuntu.img:
-	@make DISTR="ubuntu" linux.img
-
-.PHONY:
-alpine.tar:
-	@make DISTR="alpine" linux.tar
-
-.PHONY:
-alpine.img:
-	@make DISTR="alpine" linux.img
-
-linux.tar:
+linux.tar: 
 	@echo ${COL_GRN}"[Dump ${DISTR} directory structure to tar archive]"${COL_END}
-	docker build -f ${DISTR}/Dockerfile -t ${REPO}/${DISTR} .
-	docker export -o linux.tar `docker run -d ${REPO}/${DISTR} /bin/true`
+	@echo docker export -o rootfs.tar `docker run -d $@ /bin/true`
 
 linux.dir: linux.tar
 	@echo ${COL_GRN}"[Extract ${DISTR} tar archive]"${COL_END}
